@@ -1,0 +1,8 @@
+*.out
+*.obj
+*.a*
+*.so*
+*.pyc
+*.DS_store
+*.o
+.serc_framework
