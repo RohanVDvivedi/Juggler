@@ -1,5 +1,7 @@
-# serc_template_application
-This is a Project, to be used as a template application for the serc framework
+# Juggler
+an L7 Load balancer using the server application built on top of framework serc.
+
+Supports Round-robin and Consistent-hashing based load balancing.
 
 All you need to do is :
 
