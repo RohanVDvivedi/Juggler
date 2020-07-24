@@ -3,7 +3,7 @@
 
 #include<http_client_access.h>
 
-void connection_started(int conn_fd, void* server_specific_params);
-void connection_finished(int conn_fd, void* server_specific_params);
+void connection_started(int conn_fd, const void* params);
+void connection_finished(int conn_fd, const void* params);
 
 #endif
