@@ -3,7 +3,10 @@ an L7 Load balancer using the server application built on top of framework serc.
 
 Supports Round-robin and Consistent-hashing based load balancing.
 
-All you need to do is :
+Note: It supports connection persistence for medium-lived HTTP connections, generally used for web browsing.
+Note: I urge you to not use for long lived connections like those of chat servers or http streaming.
+
+Steps you need to do are :
 
 ### For first run :
 
