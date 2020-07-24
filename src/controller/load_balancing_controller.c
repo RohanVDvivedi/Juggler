@@ -1,17 +1,26 @@
 #include<http_request.h>
 #include<http_response.h>
 
-#include<http_client.h>
-
-#include<load_balancer_config.h>
+#include<http_client_access.h>
 
 #include<load_balancing_policy.h>
-
-extern transaction_client* http_clients[SERVER_COUNT];
+#include<load_balancer_config.h>
 
 int load_balancing_controller(HttpRequest* hrq, HttpResponse* hrp)
 {
 	printRequest(hrq);
-	append_to_dstring(&(hrp->body), "Hello World");
+
+	transaction_client* http_server_to_use = get_http_client_for_forwarding(hrq, LOAD_BALANCING_POLICY);
+	
+	job* promise = send_request_async(http_server_to_use, hrq, "juggler.lb");
+
+	HttpResponse* hrp_received = wait_or_get_response(promise, NULL);
+
+	*hrp = *hrp_received;
+
+	free(hrp_received);
+
+	printResponse(hrp);
+
 	return 0;
 }

@@ -2,7 +2,8 @@
 #include<stdlib.h>
 
 #include<http_server.h>
-#include<http_client.h>
+
+#include<http_client_access.h>
 
 #include<load_balancer_config.h>
 
@@ -20,6 +21,8 @@ int main()
 
 	for(int i = 0; i < SERVER_COUNT; i++)
 		shutdown_and_delete_http_client(http_clients[i]);
+
+	delete_http_client_access_key();
 	
 	return 0;
 }

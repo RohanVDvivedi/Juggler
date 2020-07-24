@@ -12,8 +12,8 @@ CON_DIR=.serc_config
 
 LOAD_BALANCING_CONFIG_DIR=.juggler_config
 
-CFLAGS=-Wall -I${INC_DIR} -I${LOAD_BALANCING_CONFIG_DIR} -I${CON_DIR} -I${CONNMAN_PATH}/inc -I${BOOMPAR_PATH}/inc -I${JSON_PARSER_PATH}/inc -I${CUTLERY_PATH}/inc -I${RWLOCK_PATH}/inc -I${SERC_PATH}/inc
-LFLAFS=-L${SERC_PATH}/bin -lserc -L${CONNMAN_PATH}/bin -lconnman -L${BOOMPAR_PATH}/bin -lpthread -lboompar -L${JSON_PARSER_PATH}/bin -ljsonpar -L${CUTLERY_PATH}/bin -lcutlery -L${RWLOCK_PATH}/bin -lrwlock -lz -lssl -lcrypto
+CFLAGS=-Wall -I${INC_DIR} -I${LOAD_BALANCING_CONFIG_DIR} -I${CON_DIR} -I${SERC_PATH}/inc
+LFLAFS=-L${SERC_PATH}/bin -lserc -lconnman -lpthread -lboompar -ljsonpar -lcutlery -lrwlock -lz -lssl -lcrypto
 
 TARGET=app.out
 
