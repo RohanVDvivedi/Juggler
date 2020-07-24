@@ -13,12 +13,12 @@ transaction_client* get_http_server_for_forwarding(HttpRequest* hrq, load_balanc
 		{
 			case ROUND_ROBIN :
 			{
-				http_server_res = round_robin_get();
+				http_server_res = round_robin_get(hrq);
 				break;
 			}
 			case CONSISTENT_HASHING :
 			{
-				http_server_res = consistent_hashing_get();
+				http_server_res = consistent_hashing_get(hrq);
 				break;
 			}
 		}

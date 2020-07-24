@@ -4,6 +4,6 @@
 #include<load_balancer_config.h>
 #include<http_client.h>
 
-transaction_client* round_robin_get();
+transaction_client* round_robin_get(HttpRequest* hrq);
 
 #endif
