@@ -6,8 +6,6 @@
 
 #include<load_balancer_config.h>
 
-#include<load_balancer_connection_callbacks.h>
-
 char* server_ips[SERVER_COUNT] = SERVER_IPS;
 char* server_ports[SERVER_COUNT] = SERVER_PORTS;
 transaction_client* http_clients[SERVER_COUNT] = {};
