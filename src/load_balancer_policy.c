@@ -2,7 +2,7 @@
 
 extern transaction_client* http_clients[SERVER_COUNT];
 
-transaction_client* get_http_client_for_forwarding(HttpRequest* hrq, load_balancing_policy policy)
+transaction_client* get_http_server_for_forwarding(HttpRequest* hrq, load_balancing_policy policy)
 {
 	return NULL;
 }

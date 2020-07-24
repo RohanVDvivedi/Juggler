@@ -2,12 +2,12 @@
 
 // the once lets you create the "pthread key for accessing http_client" only once 
 
-transaction_client* get_http_client()
+transaction_client* get_persistent_http_client()
 {
 	return NULL;
 }
 
-void* set_http_client(transaction_client* http_client)
+void set_for_persistence_http_client(transaction_client* http_client)
 {
 }
 

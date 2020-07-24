@@ -8,7 +8,7 @@ int load_balancing_controller(HttpRequest* hrq, HttpResponse* hrp)
 {
 	printRequest(hrq);
 
-	transaction_client* http_server_to_use = get_http_client_for_forwarding(hrq, LOAD_BALANCING_POLICY);
+	transaction_client* http_server_to_use = get_http_server_for_forwarding(hrq, LOAD_BALANCING_POLICY);
 	
 	job* promise = send_request_async(http_server_to_use, hrq, "juggler.lb");
 

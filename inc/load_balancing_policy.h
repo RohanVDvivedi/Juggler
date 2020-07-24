@@ -12,6 +12,6 @@ enum load_balancing_policy
 	CONSISTENT_HASHING
 };
 
-transaction_client* get_http_client_for_forwarding(HttpRequest* hrq, load_balancing_policy policy);
+transaction_client* get_http_server_for_forwarding(HttpRequest* hrq, load_balancing_policy policy);
 
 #endif
