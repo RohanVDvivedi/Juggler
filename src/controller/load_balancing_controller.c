@@ -1,8 +1,6 @@
 #include<http_request.h>
 #include<http_response.h>
 
-#include<http_client_access.h>
-
 #include<load_balancing_policy.h>
 #include<load_balancer_config.h>
 
