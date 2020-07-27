@@ -19,6 +19,98 @@ void distribute(HttpRequest* hrq,HttpResponse* hrp,file_content_cache* fcc_p)
 
 	switch(METHOD)
 	{
+		case CONNECT :
+		{
+			switch(PATH)
+			{
+				default : 
+				{
+					char* wild_card_offset = NULL;
+					// case for path = /* and supports method = CONNECT
+					if( (1 <= path_len) && (NULL != (wild_card_offset = strstr(path_str, "/"))) )
+					{
+						routing_resolved = 1;
+						hrp->status = 200;
+						error = load_balancing_controller(hrq, hrp);
+					}
+					else
+					{
+						hrp->status = 404;
+					}
+					break;
+				}
+			}
+			break;
+		}
+		case PATCH :
+		{
+			switch(PATH)
+			{
+				default : 
+				{
+					char* wild_card_offset = NULL;
+					// case for path = /* and supports method = PATCH
+					if( (1 <= path_len) && (NULL != (wild_card_offset = strstr(path_str, "/"))) )
+					{
+						routing_resolved = 1;
+						hrp->status = 200;
+						error = load_balancing_controller(hrq, hrp);
+					}
+					else
+					{
+						hrp->status = 404;
+					}
+					break;
+				}
+			}
+			break;
+		}
+		case PUT :
+		{
+			switch(PATH)
+			{
+				default : 
+				{
+					char* wild_card_offset = NULL;
+					// case for path = /* and supports method = PUT
+					if( (1 <= path_len) && (NULL != (wild_card_offset = strstr(path_str, "/"))) )
+					{
+						routing_resolved = 1;
+						hrp->status = 200;
+						error = load_balancing_controller(hrq, hrp);
+					}
+					else
+					{
+						hrp->status = 404;
+					}
+					break;
+				}
+			}
+			break;
+		}
+		case OPTIONS :
+		{
+			switch(PATH)
+			{
+				default : 
+				{
+					char* wild_card_offset = NULL;
+					// case for path = /* and supports method = OPTIONS
+					if( (1 <= path_len) && (NULL != (wild_card_offset = strstr(path_str, "/"))) )
+					{
+						routing_resolved = 1;
+						hrp->status = 200;
+						error = load_balancing_controller(hrq, hrp);
+					}
+					else
+					{
+						hrp->status = 404;
+					}
+					break;
+				}
+			}
+			break;
+		}
 		case HEAD :
 		{
 			switch(PATH)
@@ -73,98 +165,6 @@ void distribute(HttpRequest* hrq,HttpResponse* hrp,file_content_cache* fcc_p)
 				{
 					char* wild_card_offset = NULL;
 					// case for path = /* and supports method = GET
-					if( (1 <= path_len) && (NULL != (wild_card_offset = strstr(path_str, "/"))) )
-					{
-						routing_resolved = 1;
-						hrp->status = 200;
-						error = load_balancing_controller(hrq, hrp);
-					}
-					else
-					{
-						hrp->status = 404;
-					}
-					break;
-				}
-			}
-			break;
-		}
-		case PUT :
-		{
-			switch(PATH)
-			{
-				default : 
-				{
-					char* wild_card_offset = NULL;
-					// case for path = /* and supports method = PUT
-					if( (1 <= path_len) && (NULL != (wild_card_offset = strstr(path_str, "/"))) )
-					{
-						routing_resolved = 1;
-						hrp->status = 200;
-						error = load_balancing_controller(hrq, hrp);
-					}
-					else
-					{
-						hrp->status = 404;
-					}
-					break;
-				}
-			}
-			break;
-		}
-		case PATCH :
-		{
-			switch(PATH)
-			{
-				default : 
-				{
-					char* wild_card_offset = NULL;
-					// case for path = /* and supports method = PATCH
-					if( (1 <= path_len) && (NULL != (wild_card_offset = strstr(path_str, "/"))) )
-					{
-						routing_resolved = 1;
-						hrp->status = 200;
-						error = load_balancing_controller(hrq, hrp);
-					}
-					else
-					{
-						hrp->status = 404;
-					}
-					break;
-				}
-			}
-			break;
-		}
-		case CONNECT :
-		{
-			switch(PATH)
-			{
-				default : 
-				{
-					char* wild_card_offset = NULL;
-					// case for path = /* and supports method = CONNECT
-					if( (1 <= path_len) && (NULL != (wild_card_offset = strstr(path_str, "/"))) )
-					{
-						routing_resolved = 1;
-						hrp->status = 200;
-						error = load_balancing_controller(hrq, hrp);
-					}
-					else
-					{
-						hrp->status = 404;
-					}
-					break;
-				}
-			}
-			break;
-		}
-		case OPTIONS :
-		{
-			switch(PATH)
-			{
-				default : 
-				{
-					char* wild_card_offset = NULL;
-					// case for path = /* and supports method = OPTIONS
 					if( (1 <= path_len) && (NULL != (wild_card_offset = strstr(path_str, "/"))) )
 					{
 						routing_resolved = 1;
