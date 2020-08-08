@@ -4,8 +4,7 @@
 
 int load_balancing_controller(HttpRequest* hrq,HttpResponse* hrp);
 
-
-void distribute(HttpRequest* hrq,HttpResponse* hrp,file_content_cache* fcc_p)
+void distribute(HttpRequest* hrq, HttpResponse* hrp, file_cache* server_file_cache)
 {
 	char* path_str = hrq->path.cstring;
 	unsigned long long int path_len = hrq->path.bytes_occupied;
@@ -19,37 +18,14 @@ void distribute(HttpRequest* hrq,HttpResponse* hrp,file_content_cache* fcc_p)
 
 	switch(METHOD)
 	{
-		case CONNECT :
+		case OPTIONS :
 		{
 			switch(PATH)
 			{
 				default : 
 				{
 					char* wild_card_offset = NULL;
-					// case for path = /* and supports method = CONNECT
-					if( (1 <= path_len) && (NULL != (wild_card_offset = strstr(path_str, "/"))) )
-					{
-						routing_resolved = 1;
-						hrp->status = 200;
-						error = load_balancing_controller(hrq, hrp);
-					}
-					else
-					{
-						hrp->status = 404;
-					}
-					break;
-				}
-			}
-			break;
-		}
-		case PATCH :
-		{
-			switch(PATH)
-			{
-				default : 
-				{
-					char* wild_card_offset = NULL;
-					// case for path = /* and supports method = PATCH
+					// case for path = /* and supports method = OPTIONS
 					if( (1 <= path_len) && (NULL != (wild_card_offset = strstr(path_str, "/"))) )
 					{
 						routing_resolved = 1;
@@ -88,60 +64,14 @@ void distribute(HttpRequest* hrq,HttpResponse* hrp,file_content_cache* fcc_p)
 			}
 			break;
 		}
-		case OPTIONS :
+		case POST :
 		{
 			switch(PATH)
 			{
 				default : 
 				{
 					char* wild_card_offset = NULL;
-					// case for path = /* and supports method = OPTIONS
-					if( (1 <= path_len) && (NULL != (wild_card_offset = strstr(path_str, "/"))) )
-					{
-						routing_resolved = 1;
-						hrp->status = 200;
-						error = load_balancing_controller(hrq, hrp);
-					}
-					else
-					{
-						hrp->status = 404;
-					}
-					break;
-				}
-			}
-			break;
-		}
-		case HEAD :
-		{
-			switch(PATH)
-			{
-				default : 
-				{
-					char* wild_card_offset = NULL;
-					// case for path = /* and supports method = HEAD
-					if( (1 <= path_len) && (NULL != (wild_card_offset = strstr(path_str, "/"))) )
-					{
-						routing_resolved = 1;
-						hrp->status = 200;
-						error = load_balancing_controller(hrq, hrp);
-					}
-					else
-					{
-						hrp->status = 404;
-					}
-					break;
-				}
-			}
-			break;
-		}
-		case DELETE :
-		{
-			switch(PATH)
-			{
-				default : 
-				{
-					char* wild_card_offset = NULL;
-					// case for path = /* and supports method = DELETE
+					// case for path = /* and supports method = POST
 					if( (1 <= path_len) && (NULL != (wild_card_offset = strstr(path_str, "/"))) )
 					{
 						routing_resolved = 1;
@@ -180,14 +110,14 @@ void distribute(HttpRequest* hrq,HttpResponse* hrp,file_content_cache* fcc_p)
 			}
 			break;
 		}
-		case POST :
+		case PATCH :
 		{
 			switch(PATH)
 			{
 				default : 
 				{
 					char* wild_card_offset = NULL;
-					// case for path = /* and supports method = POST
+					// case for path = /* and supports method = PATCH
 					if( (1 <= path_len) && (NULL != (wild_card_offset = strstr(path_str, "/"))) )
 					{
 						routing_resolved = 1;
@@ -226,27 +156,92 @@ void distribute(HttpRequest* hrq,HttpResponse* hrp,file_content_cache* fcc_p)
 			}
 			break;
 		}
+		case DELETE :
+		{
+			switch(PATH)
+			{
+				default : 
+				{
+					char* wild_card_offset = NULL;
+					// case for path = /* and supports method = DELETE
+					if( (1 <= path_len) && (NULL != (wild_card_offset = strstr(path_str, "/"))) )
+					{
+						routing_resolved = 1;
+						hrp->status = 200;
+						error = load_balancing_controller(hrq, hrp);
+					}
+					else
+					{
+						hrp->status = 404;
+					}
+					break;
+				}
+			}
+			break;
+		}
+		case CONNECT :
+		{
+			switch(PATH)
+			{
+				default : 
+				{
+					char* wild_card_offset = NULL;
+					// case for path = /* and supports method = CONNECT
+					if( (1 <= path_len) && (NULL != (wild_card_offset = strstr(path_str, "/"))) )
+					{
+						routing_resolved = 1;
+						hrp->status = 200;
+						error = load_balancing_controller(hrq, hrp);
+					}
+					else
+					{
+						hrp->status = 404;
+					}
+					break;
+				}
+			}
+			break;
+		}
+		case HEAD :
+		{
+			switch(PATH)
+			{
+				default : 
+				{
+					char* wild_card_offset = NULL;
+					// case for path = /* and supports method = HEAD
+					if( (1 <= path_len) && (NULL != (wild_card_offset = strstr(path_str, "/"))) )
+					{
+						routing_resolved = 1;
+						hrp->status = 200;
+						error = load_balancing_controller(hrq, hrp);
+					}
+					else
+					{
+						hrp->status = 404;
+					}
+					break;
+				}
+			}
+			break;
+		}
 		default :
 		{
 			hrp->status = 404;
 		}
 	}
 
-	if(routing_resolved==0)
+	if(routing_resolved == 0)
 	{
 		// check if we can serve the request with some file, on the server's root
-		error = file_request_controller(hrq,hrp,fcc_p,&routing_resolved);
-		if(routing_resolved==0)
-		{
+		error = file_request_controller(hrq, hrp, server_file_cache, &routing_resolved);
+		if(routing_resolved == 0)
 			hrp->status = 404;
-		}
 	}
 
 	// response for a HEAD request must not contain body
 	if(METHOD == HEAD)
-	{
 		make_dstring_empty(&(hrp->body));
-	}
 
 	compressHttpResponseBody(hrp, DEFAULT_COMPRESSION);
 
