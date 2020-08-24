@@ -3,9 +3,21 @@ A light weight L7 Load balancer application built on top of framework serc.
 
 Supports (only) Round-robin load balancing policy.
 
- * It does not support connection persistence, i.e. session stickyness.
- * I urge you to not use juggler for long lived connections like those of chat servers or http streaming. No web sockets stuff what so ever.
- * Juggler maintains only a finite number of tcp connections to the backend server and hence, new client connection does not add another tcp connection to the backend server. Instead Juggler waits and receives the complete http request, parses it, and forwards the request to respective server, and then when the server finishes the response, we send back the response, the next request now will got to a completely different server (the one which is next in round robin list).
+ * It does not support **connection persistence, i.e. session stickyness**.
+ * I urge you to not use Juggler for long lived connections like those of chat servers or http streaming. No web sockets stuff what so ever.
+ * Juggler maintains only a **finite number of tcp connections to the backend server** and hence, new client connection does not add another tcp connection to the backend server.
+ * **Procedure:**
+   * Instead Juggler waits and listens for new clients.
+   * It also maintaines a finite number of connection to each backend server, over separate threads on a thread pool.
+     * 1-1 relation between thread pool and server
+     * 1-1 relation between thread and a tcp connection
+     * with n number of thread in a thread pool, each getting served by n distinct connections of that server.
+     * for m number of servers (in round robin list), there are m number of thread pools.
+     * for m number of servers, there are m * n number of total threads.
+   * Each of this thread is a part of a thread pool, and is devised to pick request objects and get serviced over an exclusive active connection (which is only accessible by that thread).
+   * When the client connection starts/connects, no new server side connection is made.
+   * Instead Juggler will wait for the client request to finish, and it will parse it and put it on a queue to be serviced by the thread pool, which is responsible to be served by a specific server.
+   * And later send the response back to the client. The new request from the client ends up with the next server/thread pool in the round robin list.
  * Essentially the backend http servers always think that Juggler is the client, making each request with a KeepAlive : true header, no other headers are modified by the Juggler.
  * Juggler does supports https and http connection from client (say browser) to Juggler, but you must use only a http server for backend (running on different hosts or port). This way Juggler is a load balancer which you would want to keep closer to servers on the network, since your servers are free from the responsibility of performing a SSL handshake.
 
