@@ -1,16 +1,23 @@
 # Juggler
-an L7 Load balancer using the server application built on top of framework serc.
+A light weight L7 Load balancer application built on top of framework serc.
 
-Supports Round-robin and Consistent-hashing based load balancing.
+Supports (only) Round-robin load balancing policy.
 
-Note: It supports connection persistence for medium-lived HTTP connections, generally used for web browsing.
-Note: I urge you to not use juggler for long lived connections like those of chat servers or http streaming.
-Note: Juggler does supports https and http connection from client (say browser) to Juggler, but you must use only a http server for backend (running on different hosts or port). This way Juggler is a load balancer which you would want to keep closer to servers on the network, since your servers are free from the responsibility of performing a SSL handshake.
+ * It does not support connection persistence, i.e. session stickyness.
+ * I urge you to not use juggler for long lived connections like those of chat servers or http streaming. No web sockets stuff what so ever.
+ * Juggler maintains only a finite number of tcp connections to the backend server and hence, new client connection does not add another tcp connection to the backend server. Instead Juggler waits and receives the complete http request, parses it, and forwards the request to respective server, and then when the server finishes the response, we send back the response, the next request now will got to a completely different server (the one which is next in round robin list).
+ * Essentially the backend http servers always think that Juggler is the client, making each request with a KeepAlive : true header, no other headers are modified by the Juggler.
+ * Juggler does supports https and http connection from client (say browser) to Juggler, but you must use only a http server for backend (running on different hosts or port). This way Juggler is a load balancer which you would want to keep closer to servers on the network, since your servers are free from the responsibility of performing a SSL handshake.
 
-Steps you need to do are :
+## Policy
+ #### Round-robin policy
+  * Round robin algorithm to select the server for every new connection.
+  * All the requests from the same client DO NOT reach the same backend server.
+
+##Steps you need to do for setup are:
 
 ### For setup before first run :
- * you must install [serc](https://github.com/RohanVDvivedi/serc.git)
+ * you must install [serc](https://github.com/RohanVDvivedi/serc.git) and its dependencies.
 
 ### For setting up the https Juggler :
  * checkout main source file at src/main.c

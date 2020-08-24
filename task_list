@@ -1,4 +1,1 @@
-* build cookie based consistent hashing protocol
-* generate random sequence before forwarding the request
-* find appropriate server usin this hash, on a consistent hashing
-* use the same cookie every time
+ * use keep alive for every request
