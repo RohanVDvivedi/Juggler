@@ -3,7 +3,7 @@
 
 #include<http_server.h>
 
-#include<http_client_access.h>
+#include<round_robin_policy.h>
 
 #include<load_balancer_config.h>
 
@@ -16,13 +16,15 @@ int main()
 	for(int i = 0; i < SERVER_COUNT; i++)
 		http_clients[i] = get_http_client(server_ips[i], server_ports[i], CONNECTIONS_PER_SERVER);
 
+	round_robin_policy_init();
+
 	http_server_run(80, NULL, 0);
 	//http_server_run(443, NULL, 1);
+
+	round_robin_policy_destroy();
 
 	for(int i = 0; i < SERVER_COUNT; i++)
 		shutdown_and_delete_http_client(http_clients[i]);
 
-	delete_http_client_access_key();
-	
 	return 0;
 }

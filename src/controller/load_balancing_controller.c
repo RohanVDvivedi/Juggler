@@ -3,24 +3,17 @@
 
 #include<stdlib.h>
 
-#include<load_balancing_policy.h>
+#include<round_robin_policy.h>
 #include<load_balancer_config.h>
 
 int load_balancing_controller(HttpRequest* hrq, HttpResponse* hrp)
 {
-	printRequest(hrq);
-
-	transaction_client* http_server_to_use = get_http_server_for_forwarding(hrq, LOAD_BALANCING_POLICY);
+	transaction_client* http_server_to_use = round_robin_policy_get(hrq);
 	
 	job* promise = send_request_async(http_server_to_use, hrq, "juggler.lb");
-
 	HttpResponse* hrp_received = wait_or_get_response(promise, NULL);
-
 	*hrp = *hrp_received;
-
 	free(hrp_received);
-
-	printResponse(hrp);
 
 	return 0;
 }
