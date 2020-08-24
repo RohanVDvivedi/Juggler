@@ -1,5 +1,7 @@
 #include<round_robin_policy.h>
 
+#include<pthread.h>
+
 extern transaction_client* http_clients[SERVER_COUNT];
 
 unsigned int next_server_to_use = 0;
