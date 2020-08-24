@@ -10,6 +10,10 @@ int load_balancing_controller(HttpRequest* hrq, HttpResponse* hrp)
 {
 	transaction_client* http_server_to_use = round_robin_policy_get(hrq);
 	
+	// add keep alive header to keep the connection alive
+	insert_unique_in_dmap_cstr(&(hrq->headers), "Connection", "Keep-Alive");
+	insert_unique_in_dmap_cstr(&(hrq->headers), "Keep-Alive", "always");
+
 	job* promise = send_request_async(http_server_to_use, hrq, "juggler.lb");
 	HttpResponse* hrp_received = wait_or_get_response(promise, NULL);
 	if(hrp_received != NULL)
