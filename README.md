@@ -10,11 +10,11 @@ Supports (only) Round-robin load balancing policy.
    * Instead Juggler waits and listens for new clients.
    * It also maintaines a finite number of connection to each backend server, over separate threads on a thread pool.
      * 1-1 relation between thread pool and server
-     * 1-1 relation between thread and a tcp connection
+     * 1-1 relation between thread and a tcp connection with the server
      * with n number of thread in a thread pool, each getting served by n distinct connections of that server.
      * for m number of servers (in round robin list), there are m number of thread pools.
      * for m number of servers, there are m * n number of total threads.
-   * Each of this thread is a part of a thread pool, and is devised to pick request objects and get serviced over an exclusive active connection (which is only accessible by that thread).
+   * Each of this thread is a part of a thread pool, and is devised to pick request objects and service them over an exclusive active connection (which is only accessible by that thread).
    * When the client connection starts/connects, no new server side connection is made.
    * Instead Juggler will wait for the client request to finish, and it will parse it and put it on a queue to be serviced by the thread pool, which is responsible to be served by a specific server.
    * And later send the response back to the client. The new request from the client ends up with the next server/thread pool in the round robin list.
