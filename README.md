@@ -6,8 +6,9 @@ Supports (only) Round-robin load balancing policy.
  * It does not support **connection persistence, i.e. session stickyness**.
  * I urge you to not use Juggler for long lived connections like those of chat servers or http streaming. No web sockets stuff what so ever.
  * Juggler maintains only a **finite number of tcp connections to the backend server** and hence, new client connection does not add another tcp connection to the backend server.
- * **Procedure:**
-   * Instead Juggler waits and listens for new clients.
+
+**Internal working :**
+   * Juggler waits and listens for new clients (obvious).
    * It also maintaines a finite number of connection to each backend server, over separate threads on a thread pool.
      * 1-1 relation between thread pool and server
      * 1-1 relation between thread and a tcp connection with the server
